@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Каталог мішечків | Bobbin</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -13,7 +13,7 @@
       color: #333;
     }
     header {
-      background: #1a1a1a;
+      background: #0c4101;
       color: #fff;
       padding: 40px 20px;
       text-align: center;
@@ -43,7 +43,7 @@
     }
     .product-card:hover {
       transform: translateY(-10px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+      box-shadow: 0 12px 32px rgba(8, 63, 1, 0.15);
     }
     .product-image img {
       width: 100%;
@@ -72,23 +72,28 @@
       top: 0;
       width: 100%;
       height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: rgba(3, 8, 3, 0.9);
       align-items: center;
       justify-content: center;
     }
     .modal-content {
       position: relative;
-      max-width: 90%;
-      max-height: 80%;
+      width: 100%;
+      height: 100%;
       display: flex;
-      flex-direction: column;
       align-items: center;
+      justify-content: center;
     }
     .modal-content img {
-      max-width: 100%;
-      max-height: 500px;
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+      object-fit: contain;
       border-radius: 12px;
+      transition: transform 0.3s ease;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
     }
     .close {
       position: absolute;
@@ -108,6 +113,7 @@
       color: #fff;
       cursor: pointer;
       z-index: 1001;
+      user-select: none;
     }
     .nav-left { left: 20px; }
     .nav-right { right: 20px; }
@@ -115,13 +121,13 @@
 </head>
 <body>
   <header>
-    <h1>Колекція елітних мішечків від Bobbin</h1>
+    <h1>Пакування Bobbin</h1>
   </header>
 
   <section class="catalog">
     <div class="product-card" onclick="openModal(0)">
       <div class="product-image">
-         <img src="images/photo1.jpg" alt="Мішечок тканинний">
+        <img src="images/photo1.jpg" alt="Мішечок тканинний" />
       </div>
       <div class="product-info">
         <h2>Мішечок тканинний</h2>
@@ -133,7 +139,7 @@
 
     <div class="product-card" onclick="openModal(1)">
       <div class="product-image">
-        <img src="https://via.placeholder.com/400x250.png?text=Мішечок+2" alt="Мішечок з органзи">
+        <img src="https://via.placeholder.com/400x250.png?text=Мішечок+2" alt="Мішечок з органзи" />
       </div>
       <div class="product-info">
         <h2>Мішечок з органзи</h2>
@@ -145,7 +151,7 @@
 
     <div class="product-card" onclick="openModal(2)">
       <div class="product-image">
-        <img src="https://via.placeholder.com/400x250.png?text=Мішечок+3" alt="Мішечок джутовий">
+        <img src="https://via.placeholder.com/400x250.png?text=Мішечок+3" alt="Мішечок джутовий" />
       </div>
       <div class="product-info">
         <h2>Мішечок джутовий</h2>
@@ -160,40 +166,124 @@
     <span class="close" onclick="closeModal()">&times;</span>
     <span class="nav-arrow nav-left" onclick="prevImage(event)">&#10094;</span>
     <div class="modal-content">
-      <img id="modal-img" src="" alt="Велике зображення">
+      <img id="modal-img" src="" alt="Велике зображення" />
     </div>
     <span class="nav-arrow nav-right" onclick="nextImage(event)">&#10095;</span>
   </div>
 
   <script>
     const images = [
-      "https://i.ibb.co/C5fBNgH/photo1.jpg",
-      "https://via.placeholder.com/800x600.png?text=Мішечок+2",
-      "https://via.placeholder.com/800x600.png?text=Мішечок+3"
+      [
+        "images/photo1.jpg",
+        "images/photo1.2.jpg",
+        "images/photo1.3.jpg",
+        "images/photo1.4.jpg"
+      ],
+      [
+        "https://via.placeholder.com/800x600.png?text=Мішечок+2-1",
+        "https://via.placeholder.com/800x600.png?text=Мішечок+2-2"
+      ],
+      [
+        "https://via.placeholder.com/800x600.png?text=Мішечок+3-1"
+      ]
     ];
-    let currentIndex = 0;
+
+    let currentProduct = 0;
+    let currentPhotoIndex = 0;
+    let scale = 1, lastScale = 1, dx = 0, dy = 0;
+    let startX = 0, startY = 0, dragging = false;
+    const img = document.getElementById("modal-img");
 
     function openModal(index) {
-      currentIndex = index;
-      document.getElementById("modal-img").src = images[currentIndex];
+      currentProduct = index;
+      currentPhotoIndex = 0;
+      resetTransform();
+      updateModalImage();
       document.getElementById("modal").style.display = "flex";
     }
 
     function closeModal() {
       document.getElementById("modal").style.display = "none";
+      resetTransform();
     }
 
-    function nextImage(event) {
-      event.stopPropagation();
-      currentIndex = (currentIndex + 1) % images.length;
-      document.getElementById("modal-img").src = images[currentIndex];
+    function nextImage(e) {
+      e.stopPropagation();
+      currentPhotoIndex = (currentPhotoIndex + 1) % images[currentProduct].length;
+      resetTransform();
+      updateModalImage();
     }
 
-    function prevImage(event) {
-      event.stopPropagation();
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      document.getElementById("modal-img").src = images[currentIndex];
+    function prevImage(e) {
+      e.stopPropagation();
+      currentPhotoIndex = (currentPhotoIndex - 1 + images[currentProduct].length) % images[currentProduct].length;
+      resetTransform();
+      updateModalImage();
     }
+
+    function updateModalImage() {
+      img.src = images[currentProduct][currentPhotoIndex];
+    }
+
+    function applyTransform() {
+      img.style.transform = `scale(${scale}) translate(${dx / scale}px, ${dy / scale}px)`;
+    }
+
+    function resetTransform() {
+      scale = 1; dx = 0; dy = 0;
+      applyTransform();
+    }
+
+    img.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      scale = Math.min(Math.max(1, scale + delta), 5);
+      applyTransform();
+    });
+
+    img.addEventListener("mousedown", (e) => {
+      if (scale === 1) return;
+      dragging = true;
+      startX = e.pageX - dx;
+      startY = e.pageY - dy;
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!dragging) return;
+      dx = e.pageX - startX;
+      dy = e.pageY - startY;
+      applyTransform();
+    });
+
+    window.addEventListener("mouseup", () => dragging = false);
+
+    // touch zoom & drag
+    img.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 3) {
+        const [a, b] = e.touches;
+        lastScale = scale;
+        img._startDist = Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
+      } else if (e.touches.length === 1 && scale > 1) {
+        dragging = true;
+        startX = e.touches[0].clientX - dx;
+        startY = e.touches[0].clientY - dy;
+      }
+    });
+
+    img.addEventListener("touchmove", (e) => {
+      if (e.touches.length === 2 && img._startDist) {
+        const [a, b] = e.touches;
+        const newDist = Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
+        scale = Math.min(Math.max(1, lastScale * newDist / img._startDist), 5);
+        applyTransform();
+      } else if (e.touches.length === 1 && dragging) {
+        dx = e.touches[0].clientX - startX;
+        dy = e.touches[0].clientY - startY;
+        applyTransform();
+      }
+    });
+
+    img.addEventListener("touchend", () => dragging = false);
   </script>
 </body>
 </html>
