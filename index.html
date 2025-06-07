@@ -4,66 +4,210 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Каталог мішечків | Bobbin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto:wght@300;400;500&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary-color: #0c4101;
+      --secondary-color: #e2d1c3;
+      --accent-color: #8b5a2b;
+      --text-color: #333;
+      --card-border: #e0dcd5;
+      --shadow-color: rgba(0,0,0,0.1);
+      --hover-shadow: rgba(8, 63, 1, 0.15);
+      --background-gradient: linear-gradient(to right, #fdfcfb, #e2d1c3);
+      --modal-bg: rgba(3, 8, 3, 0.9);
+    }
+    
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
     body {
       font-family: 'Roboto', sans-serif;
       margin: 0;
-      background: linear-gradient(to right, #fdfcfb, #e2d1c3);
-      color: #333;
+      background: var(--background-gradient);
+      color: var(--text-color);
+      overflow-x: hidden;
+      touch-action: manipulation;
     }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
     header {
-      background: #0c4101;
+      background: var(--primary-color);
       color: #fff;
-      padding: 40px 20px;
+      padding: 40px 0;
       text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: relative;
     }
-    h1 {
+    
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo {
       font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      margin: 0;
+      font-size: 3rem;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      position: relative;
+    }
+    
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background-color: var(--secondary-color);
+    }
+    
+    .tagline {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-top: 5px;
       letter-spacing: 1px;
     }
+    
+    nav {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      padding: 15px 0;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+    
+    .nav-list {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .nav-item {
+      margin: 0 20px;
+    }
+    
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .nav-link:hover {
+      color: var(--secondary-color);
+    }
+    
     .catalog {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 30px;
-      padding: 60px;
-      max-width: 1400px;
-      margin: auto;
+      padding: 80px 0;
     }
+    
     .product-card {
       background: #fff;
       border-radius: 24px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 24px var(--shadow-color);
       overflow: hidden;
-      transition: all 0.4s ease;
-      border: 1px solid #e0dcd5;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid var(--card-border);
       cursor: pointer;
+      position: relative;
+      z-index: 1;
     }
+    
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(12, 65, 1, 0.1) 0%, rgba(139, 90, 43, 0.1) 100%);
+      z-index: 0;
+    }
+    
     .product-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 12px 32px rgba(8, 63, 1, 0.15);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 12px 32px var(--hover-shadow);
     }
+    
+    .product-image {
+      overflow: hidden;
+      position: relative;
+      height: 250px;
+    }
+    
     .product-image img {
       width: 100%;
-      height: 250px;
+      height: 100%;
       object-fit: cover;
+      transition: transform 0.3s ease;
+      position: relative;
+      z-index: 2;
     }
+    
     .product-info {
       padding: 24px;
       text-align: center;
+      position: relative;
+      z-index: 2;
     }
-    .product-info h2 {
+    
+    .product-name {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
       margin: 0 0 10px;
       color: #4b3832;
+      font-weight: 700;
     }
-    .product-info p {
-      margin: 6px 0;
-      font-size: 1rem;
+    
+    .product-details {
+      margin: 15px 0;
     }
+    
+    .product-detail {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    
+    .product-price {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-top: 15px;
+      display: block;
+    }
+    
+    .product-quantity {
+      font-size: 0.9rem;
+      color: var(--accent-color);
+      margin-top: 5px;
+      display: block;
+    }
+    
     .modal {
       display: none;
       position: fixed;
@@ -72,39 +216,91 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(3, 8, 3, 0.9);
+      background-color: var(--modal-bg);
       align-items: center;
       justify-content: center;
+      opacity: 0;
+      transition: opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      touch-action: none;
     }
+    
+    .modal.active {
+      display: flex;
+      opacity: 1;
+    }
+    
     .modal-content {
+      position: relative;
+      width: 90%;
+      height: 90%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 12px;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal-image-container {
       position: relative;
       width: 100%;
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
+    
     .modal-content img {
       width: 100%;
-      height: auto;
-      max-height: 100%;
+      height: 100%;
       object-fit: contain;
-      border-radius: 12px;
       transition: transform 0.3s ease;
+      will-change: transform;
       cursor: grab;
-      touch-action: none;
-      user-select: none;
     }
-    .close {
+    
+    .modal-content img:active {
+      cursor: grabbing;
+    }
+    
+    .zoom-controls {
       position: absolute;
-      top: 20px;
-      right: 30px;
-      color: #fff;
-      font-size: 36px;
-      font-weight: bold;
-      cursor: pointer;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 15px;
       z-index: 1001;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px 20px;
+      border-radius: 30px;
+      backdrop-filter: blur(5px);
     }
+    
+    .zoom-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .zoom-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+    
+    .zoom-btn:active {
+      transform: scale(0.95);
+    }
+    
     .nav-arrow {
       position: absolute;
       top: 50%;
@@ -114,176 +310,929 @@
       cursor: pointer;
       z-index: 1001;
       user-select: none;
+      background: rgba(0,0,0,0.3);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
     }
+    
+    .nav-arrow:hover {
+      background: rgba(0,0,0,0.6);
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    .nav-arrow:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+    
     .nav-left { left: 20px; }
     .nav-right { right: 20px; }
+    
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 36px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+      transition: transform 0.3s ease;
+    }
+    
+    .close:hover {
+      transform: scale(1.2);
+    }
+    
+    .close:active {
+      transform: scale(0.95);
+    }
+    
+    .zoom-level {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      color: white;
+      font-size: 14px;
+      background: rgba(0,0,0,0.5);
+      padding: 5px 10px;
+      border-radius: 15px;
+      z-index: 1001;
+      backdrop-filter: blur(5px);
+    }
+    
+    .image-indicator {
+      position: absolute;
+      bottom: 70px;
+      right: 20px;
+      color: white;
+      font-size: 14px;
+      background: rgba(0,0,0,0.5);
+      padding: 5px 10px;
+      border-radius: 15px;
+      z-index: 1001;
+      backdrop-filter: blur(5px);
+    }
+    
+    .loading-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      z-index: 1000;
+    }
+    
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .toast.show {
+      opacity: 1;
+    }
+    
+    .modal-image-counter {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px 10px;
+      border-radius: 15px;
+      z-index: 1001;
+      backdrop-filter: blur(5px);
+    }
+    
+    .image-gallery {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 1001;
+    }
+    
+    .gallery-thumbnail {
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    
+    .gallery-thumbnail.active {
+      border-color: var(--accent-color);
+    }
+    
+    .gallery-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .product-card:hover .product-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(12, 65, 1, 0.2) 0%, rgba(139, 90, 43, 0.2) 100%);
+      z-index: 3;
+    }
+    
+    footer {
+      background-color: var(--primary-color);
+      color: #fff;
+      padding: 40px 0;
+      margin-top: 60px;
+    }
+    
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    
+    .footer-section {
+      flex: 1;
+      min-width: 250px;
+      margin-bottom: 30px;
+    }
+    
+    .footer-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .footer-title::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background-color: var(--secondary-color);
+    }
+    
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .footer-link {
+      margin-bottom: 10px;
+    }
+    
+    .footer-link a {
+      color: #e2d1c3;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-link a:hover {
+      color: var(--accent-color);
+    }
+    
+    .contact-info {
+      margin-bottom: 15px;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .contact-item i {
+      margin-right: 10px;
+      color: var(--accent-color);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: #fff;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .social-link:hover {
+      background-color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+      }
+      
+      .logo {
+        font-size: 2.5rem;
+      }
+      
+      .tagline {
+        font-size: 1rem;
+      }
+      
+      .nav-list {
+        flex-wrap: wrap;
+      }
+      
+      .nav-item {
+        margin: 5px 10px;
+      }
+      
+      .catalog {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        padding: 60px 10px;
+      }
+      
+      .product-image {
+        height: 200px;
+      }
+      
+      .footer-section {
+        flex: 100%;
+      }
+    }
+    
+    /* Анімація для підсвітки при наведенні */
+    @keyframes highlight {
+      0% { box-shadow: 0 0 0 rgba(12, 65, 1, 0); }
+      50% { box-shadow: 0 0 20px rgba(12, 65, 1, 0.5); }
+      100% { box-shadow: 0 0 0 rgba(12, 65, 1, 0); }
+    }
+    
+    .highlighted {
+      animation: highlight 2s ease;
+    }
+    
+    /* Анімація для плавного входу в екран */
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Пакування Bobbin</h1>
-  </header>
-
-  <section class="catalog">
-    <div class="product-card" onclick="openModal(0)">
-      <div class="product-image">
-        <img src="images/photo1.jpg" alt="Мішечок тканинний" />
-      </div>
-      <div class="product-info">
-        <h2>Мішечок тканинний</h2>
-        <p><strong>Розмір:</strong> 10×15 см</p>
-        <p><strong>Ціна:</strong> 5.00 грн</p>
-        <p><strong>Кількість:</strong> 100 шт</p>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">Bobbin</div>
+        <div class="tagline">Екологічне пакування для вашого бізнесу</div>
       </div>
     </div>
-
-    <div class="product-card" onclick="openModal(1)">
-      <div class="product-image">
-        <img src="https://via.placeholder.com/400x250.png?text=Мішечок+2" alt="Мішечок з органзи" />
+    </header>
+    
+    <nav>
+      <div class="container">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#" class="nav-link">Головна</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Каталог</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Про нас</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Контакти</a></li>
+        </ul>
       </div>
-      <div class="product-info">
-        <h2>Мішечок з органзи</h2>
-        <p><strong>Розмір:</strong> 15×20 см</p>
-        <p><strong>Ціна:</strong> 6.50 грн</p>
-        <p><strong>Кількість:</strong> 50 шт</p>
+    </nav>
+    
+    <section class="catalog">
+      <div class="container">
+        <div class="product-card" onclick="openModal(0)">
+          <div class="product-image">
+            <img src="https://picsum.photos/seed/bobbin1/400/250.jpg" alt="Мішечок тканинний" />
+          </div>
+          <div class="product-info">
+            <h2 class="product-name">Мішечок тканинний</h2>
+            <div class="product-details">
+              <div class="product-detail">
+                <span>Розмір:</span>
+                <span>10×15 см</span>
+              </div>
+              <div class="product-detail">
+                <span>Матеріал:</span>
+                <span>100% бавовна</span>
+              </div>
+            </div>
+            <span class="product-price">5.00 грн</span>
+            <span class="product-quantity">Кількість: 100 шт</span>
+          </div>
+        </div>
+        
+        <div class="product-card" onclick="openModal(1)">
+          <div class="product-image">
+            <img src="https://picsum.photos/seed/bobbin2/400/250.jpg" alt="Мішечок з органзи" />
+          </div>
+          <div class="product-info">
+            <h2 class="product-name">Мішечок з органзи</h2>
+            <div class="product-details">
+              <div class="product-detail">
+                <span>Розмір:</span>
+                <span>15×20 см</span>
+              </div>
+              <div class="product-detail">
+                <span>Матеріал:</span>
+                <span>Органза</span>
+              </div>
+            </div>
+            <span class="product-price">6.50 грн</span>
+            <span class="product-quantity">Кількість: 50 шт</span>
+          </div>
+        </div>
+        
+        <div class="product-card" onclick="openModal(2)">
+          <div class="product-image">
+            <img src="https://picsum.photos/seed/bobbin3/400/250.jpg" alt="Мішечок джутовий" />
+          </div>
+          <div class="product-info">
+            <h2 class="product-name">Мішечок джутовий</h2>
+            <div class="product-details">
+              <div class="product-detail">
+                <span>Розмір:</span>
+                <span>20×30 см</span>
+              </div>
+              <div class="product-detail">
+                <span>Матеріал:</span>
+                <span>Джут</span>
+              </div>
+            </div>
+            <span class="product-price">9.00 грн</span>
+            <span class="product-quantity">Кількість: 30 шт</span>
+          </div>
+        </div>
       </div>
+    </section>
+    
+    <div id="modal" class="modal">
+      <div class="loading-indicator" id="loading-indicator"></div>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <span class="nav-arrow nav-left" onclick="prevImage(event)">&#10094;</span>
+      <div class="modal-content">
+        <div class="modal-image-container">
+          <img id="modal-img" src="" alt="Велике зображення" />
+        </div>
+      </div>
+      <div class="zoom-controls">
+        <button class="zoom-btn" onclick="zoomOut()">&minus;</button>
+        <button class="zoom-btn" onclick="resetZoom()">⟲</button>
+        <button class="zoom-btn" onclick="zoomIn()">&plus;</button>
+      </div>
+      <span class="nav-arrow nav-right" onclick="nextImage(event)">&#10095;</span>
+      <div class="zoom-level">100%</div>
+      <div class="modal-image-counter"></div>
+      <div class="image-indicator"></div>
+      <div class="image-gallery"></div>
     </div>
-
-    <div class="product-card" onclick="openModal(2)">
-      <div class="product-image">
-        <img src="https://via.placeholder.com/400x250.png?text=Мішечок+3" alt="Мішечок джутовий" />
+    
+    <div id="toast" class="toast"></div>
+    
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3 class="footer-title">Про нас</h3>
+            <p>Bobbin пропонує екологічне пакування для вашого бізнесу. Наші продукти виготовлені з натурального джуту, органзи та бавовни, що робить їх не тільки стильними, але й дружніми до довкілля.</p>
+            <div class="social-links">
+              <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            </div>
+          </div>
+          
+          <div class="footer-section">
+            <h3 class="footer-title">Посилання</h3>
+            <ul class="footer-links">
+              <li class="footer-link"><a href="#">Головна</a></li>
+              <li class="footer-link"><a href="#">Каталог</a></li>
+              <li class="footer-link"><a href="#">Про нас</a></li>
+              <li class="footer-link"><a href="#">Контакти</a></li>
+              <li class="footer-link"><a href="#">Політика конфіденційності</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-section">
+            <h3 class="footer-title">Контакти</h3>
+            <div class="contact-info">
+              <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>вул. Зелена 15, Київ, 02000</span>
+              </div>
+              <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>+38 (067) 123-45-67</span>
+              </div>
+              <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>info@bobbin.com</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="copyright">
+          &copy; 2023 Bobbin. Всі права захищено.
+        </div>
       </div>
-      <div class="product-info">
-        <h2>Мішечок джутовий</h2>
-        <p><strong>Розмір:</strong> 20×30 см</p>
-        <p><strong>Ціна:</strong> 9.00 грн</p>
-        <p><strong>Кількість:</strong> 30 шт</p>
-      </div>
-    </div>
-  </section>
-
-  <div id="modal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <span class="nav-arrow nav-left" onclick="prevImage(event)">&#10094;</span>
-    <div class="modal-content">
-      <img id="modal-img" src="" alt="Велике зображення" />
-    </div>
-    <span class="nav-arrow nav-right" onclick="nextImage(event)">&#10095;</span>
-  </div>
-
-  <script>
-    const images = [
-      [
-        "images/photo1.jpg",
-        "images/photo1.2.jpg",
-        "images/photo1.3.jpg",
-        "images/photo1.4.jpg"
-      ],
-      [
-        "https://via.placeholder.com/800x600.png?text=Мішечок+2-1",
-        "https://via.placeholder.com/800x600.png?text=Мішечок+2-2"
-      ],
-      [
-        "https://via.placeholder.com/800x600.png?text=Мішечок+3-1"
-      ]
-    ];
-
-    let currentProduct = 0;
-    let currentPhotoIndex = 0;
-    let scale = 1, lastScale = 1, dx = 0, dy = 0;
-    let startX = 0, startY = 0, dragging = false;
-    const img = document.getElementById("modal-img");
-
-    function openModal(index) {
-      currentProduct = index;
-      currentPhotoIndex = 0;
-      resetTransform();
-      updateModalImage();
-      document.getElementById("modal").style.display = "flex";
-    }
-
-    function closeModal() {
-      document.getElementById("modal").style.display = "none";
-      resetTransform();
-    }
-
-    function nextImage(e) {
-      e.stopPropagation();
-      currentPhotoIndex = (currentPhotoIndex + 1) % images[currentProduct].length;
-      resetTransform();
-      updateModalImage();
-    }
-
-    function prevImage(e) {
-      e.stopPropagation();
-      currentPhotoIndex = (currentPhotoIndex - 1 + images[currentProduct].length) % images[currentProduct].length;
-      resetTransform();
-      updateModalImage();
-    }
-
-    function updateModalImage() {
-      img.src = images[currentProduct][currentPhotoIndex];
-    }
-
-    function applyTransform() {
-      img.style.transform = `scale(${scale}) translate(${dx / scale}px, ${dy / scale}px)`;
-    }
-
-    function resetTransform() {
-      scale = 1; dx = 0; dy = 0;
-      applyTransform();
-    }
-
-    img.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      const delta = e.deltaY > 0 ? -0.1 : 0.1;
-      scale = Math.min(Math.max(1, scale + delta), 5);
-      applyTransform();
-    });
-
-    img.addEventListener("mousedown", (e) => {
-      if (scale === 1) return;
-      dragging = true;
-      startX = e.pageX - dx;
-      startY = e.pageY - dy;
-    });
-
-    window.addEventListener("mousemove", (e) => {
-      if (!dragging) return;
-      dx = e.pageX - startX;
-      dy = e.pageY - startY;
-      applyTransform();
-    });
-
-    window.addEventListener("mouseup", () => dragging = false);
-
-    // touch zoom & drag
-    img.addEventListener("touchstart", (e) => {
-      if (e.touches.length === 3) {
-        const [a, b] = e.touches;
-        lastScale = scale;
-        img._startDist = Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
-      } else if (e.touches.length === 1 && scale > 1) {
-        dragging = true;
-        startX = e.touches[0].clientX - dx;
-        startY = e.touches[0].clientY - dy;
+    </footer>
+    
+    <script>
+      // Дані про продукти та їх зображення
+      const products = [
+        {
+          name: "Мішечок тканинний",
+          size: "10×15 см",
+          material: "100% бавовна",
+          price: "5.00 грн",
+          quantity: "100 шт",
+          images: [
+            "https://picsum.photos/seed/bobbin1/800/600.jpg",
+            "https://picsum.photos/seed/bobbin1-2/800/600.jpg",
+            "https://picsum.photos/seed/bobbin1-3/800/600.jpg",
+            "https://picsum.photos/seed/bobbin1-4/800/600.jpg"
+          ]
+        },
+        {
+          name: "Мішечок з органзи",
+          size: "15×20 см",
+          material: "Органза",
+          price: "6.50 грн",
+          quantity: "50 шт",
+          images: [
+            "https://picsum.photos/seed/bobbin2/800/600.jpg",
+            "https://picsum.photos/seed/bobbin2-2/800/600.jpg"
+          ]
+        },
+        {
+          name: "Мішечок джутовий",
+          size: "20×30 см",
+          material: "Джут",
+          price: "9.00 грн",
+          quantity: "30 шт",
+          images: [
+            "https://picsum.photos/seed/bobbin3/800/600.jpg"
+          ]
+        }
+      ];
+      
+      let currentProduct = 0;
+      let currentPhotoIndex = 0;
+      let scale = 1;
+      let translateX = 0;
+      let translateY = 0;
+      let isAnimating = false;
+      let isDragging = false;
+      let startX, startY;
+      let lastTranslateX = 0, lastTranslateY = 0;
+      let touchStartDistance = 0;
+      let touchStartScale = 1;
+      
+      const img = document.getElementById("modal-img");
+      const modal = document.getElementById("modal");
+      const zoomLevel = document.querySelector('.zoom-level');
+      const loadingIndicator = document.getElementById('loading-indicator');
+      const toast = document.getElementById('toast');
+      const modalImageCounter = document.querySelector('.modal-image-counter');
+      const imageIndicator = document.querySelector('.image-indicator');
+      const imageGallery = document.querySelector('.image-gallery');
+      
+      // Показ повідомлення
+      function showToast(message, duration = 3000) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, duration);
       }
-    });
-
-    img.addEventListener("touchmove", (e) => {
-      if (e.touches.length === 2 && img._startDist) {
-        const [a, b] = e.touches;
-        const newDist = Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
-        scale = Math.min(Math.max(1, lastScale * newDist / img._startDist), 5);
-        applyTransform();
-      } else if (e.touches.length === 1 && dragging) {
-        dx = e.touches[0].clientX - startX;
-        dy = e.touches[0].clientY - startY;
-        applyTransform();
+      
+      // Збільшення масштабу
+      function zoomIn() {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        const newScale = Math.min(scale + 0.2, 5);
+        animateZoom(newScale);
       }
-    });
-
-    img.addEventListener("touchend", () => dragging = false);
-  </script>
-</body>
-</html>
+      
+      // Зменшення масштабу
+      function zoomOut() {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        const newScale = Math.max(scale - 0.2, 1);
+        animateZoom(newScale);
+      }
+      
+      // Скидання масштабу
+      function resetZoom() {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        animateZoom(1);
+      }
+      
+      // Анімація зміни масштабу
+      function animateZoom(targetScale) {
+        const duration = 300; // тривалість анімації в мс
+        const startTime = performance.now();
+        const startScale = scale;
+        
+        function animate(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeProgress = 1 - Math.pow(1 - progress, 3); // Кубічна функція сповільнення
+        
+          scale = startScale + (targetScale - startScale) * easeProgress;
+          
+          applyTransform();
+          updateZoomLevel();
+          
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            isAnimating = false;
+          }
+        }
+        
+        requestAnimationFrame(animate);
+      }
+      
+      // Застосування трансформації до зображення
+      function applyTransform() {
+        img.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
+      }
+      
+      // Оновлення показника рівня зуму
+      function updateZoomLevel() {
+        const percent = Math.round(scale * 100);
+        zoomLevel.textContent = `${percent}%`;
+      }
+      
+      // Відкриття модального вікна
+      function openModal(index) {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        currentProduct = index;
+        currentPhotoIndex = 0;
+        resetTransform();
+        updateModalImage();
+        updateImageGallery();
+        
+        modal.classList.add('active');
+        
+        setTimeout(() => {
+          isAnimating = false;
+        }, 400);
+      }
+      
+      // Закриття модального вікна
+      function closeModal() {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        modal.classList.remove('active');
+        resetTransform();
+        
+        setTimeout(() => {
+          isAnimating = false;
+        }, 400);
+      }
+      
+      // Оновлення зображення
+      function updateModalImage() {
+        loadingIndicator.style.display = 'block';
+        img.style.opacity = '0.5';
+        
+        // Завантаження зображення
+        const newImg = new Image();
+        newImg.src = products[currentProduct].images[currentPhotoIndex];
+        
+        newImg.onload = function() {
+          img.src = newImg.src;
+          loadingIndicator.style.display = 'none';
+          img.style.opacity = '1';
+        };
+        
+        newImg.onerror = function() {
+          loadingIndicator.style.display = 'none';
+          img.style.opacity = '1';
+          showToast('Помилка завантаження зображення');
+        };
+        
+        // Оновлення лічильника зображення
+        updateImageCounter();
+      }
+      
+      // Оновлення лічильника зображення
+      function updateImageCounter() {
+        modalImageCounter.textContent = `${currentPhotoIndex + 1} / ${products[currentProduct].images.length}`;
+        imageIndicator.textContent = `${currentPhotoIndex + 1} з ${products[currentProduct].images.length}`;
+      }
+      
+      // Оновлення галереї мініатюр
+      function updateImageGallery() {
+        imageGallery.innerHTML = '';
+        
+        products[currentProduct].images.forEach((image, index) => {
+          const thumbnail = document.createElement('div');
+          thumbnail.className = `gallery-thumbnail ${index === currentPhotoIndex ? 'active' : ''}`;
+          thumbnail.innerHTML = `<img src="${image}" alt="Мініатюра ${index + 1}">`;
+          thumbnail.addEventListener('click', () => {
+            currentPhotoIndex = index;
+            resetTransform();
+            updateModalImage();
+          });
+          imageGallery.appendChild(thumbnail);
+        });
+      }
+      
+      // Скидання трансформацій
+      function resetTransform() {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        lastTranslateX = 0;
+        lastTranslateY = 0;
+        applyTransform();
+        updateZoomLevel();
+      }
+      
+      // Перемикання на наступне зображення
+      function nextImage(e) {
+        e.stopPropagation();
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        currentPhotoIndex = (currentPhotoIndex + 1) % products[currentProduct].images.length;
+        resetTransform();
+        updateModalImage();
+        updateImageGallery();
+        updateImageCounter();
+        
+        setTimeout(() => {
+          isAnimating = false;
+        }, 300);
+      }
+      
+      // Перемикання на попереднє зображення
+      function prevImage(e) {
+        e.stopPropagation();
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        currentPhotoIndex = (currentPhotoIndex - 1 + products[currentProduct].images.length) % products[currentProduct].images.length;
+        resetTransform();
+        updateModalImage();
+        updateImageGallery();
+        updateImageCounter();
+        
+        setTimeout(() => {
+          isAnimating = false;
+        }, 300);
+      }
+      
+      // Обробник події зумування мишею
+      img.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        if (isAnimating) return;
+        
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        const newScale = Math.min(Math.max(1, scale + delta), 5);
+        animateZoom(newScale);
+      });
+      
+      // Додавання можливості перетягування зображення при зумі
+      img.addEventListener('mousedown', (e) => {
+        if (scale <= 1 || isAnimating) return;
+        
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+        img.style.cursor = 'grabbing';
+        e.preventDefault();
+      });
+      
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        
+        // Обмеження переміщення
+        const maxTranslate = 100 * (scale - 1);
+        translateX = Math.max(-maxTranslate, Math.min(maxTranslate, translateX));
+        translateY = Math.max(-maxTranslate, Math.min(maxTranslate, translateY));
+        
+        applyTransform();
+      });
+      
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+        img.style.cursor = 'grab';
+      });
+      
+      // Додавання можливості закрити модальне вікно кліком поза межами зображення
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+      
+      // Додаткові оптимізації
+      window.addEventListener('resize', () => {
+        if (modal.classList.contains('active') && !isAnimating) {
+          resetTransform();
+        }
+      });
+      
+      // Додаткова функціональність для клавіатури
+      document.addEventListener('keydown', (e) => {
+        if (!modal.classList.contains('active')) return;
+        
+        switch (e.key) {
+          case 'ArrowRight':
+            nextImage(new Event('click'));
+            break;
+          case 'ArrowLeft':
+            prevImage(new Event('click'));
+            break;
+          case 'Escape':
+            closeModal();
+            break;
+          case '+':
+            zoomIn();
+            break;
+          case '-':
+            zoomOut();
+            break;
+          case '0':
+            resetZoom();
+            break;
+        }
+      });
+      
+      // Додаткова функціональність для мобільних пристроїв (мультитач)
+      let touchStartX, touchStartY;
+      
+      img.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          // Одинарний дотик - перетягування
+          if (scale > 1) {
+            isDragging = true;
+            touchStartX = e.touches[0].clientX - translateX;
+            touchStartY = e.touches[0].clientY - translateY;
+          }
+        } else if (e.touches.length === 2) {
+          // Двійний дотик - зум
+          isDragging = false;
+          const touch1 = e.touches[0];
+          const touch2 = e.touches[1];
+          touchStartDistance = Math.hypot(
+            touch2.clientX - touch1.clientX,
+            touch2.clientY - touch1.clientY
+          );
+          touchStartScale = scale;
+        }
+        e.preventDefault();
+      });
+      
+      img.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 1 && isDragging) {
+          // Перетягування при одинарному дотику
+          translateX = e.touches[0].clientX - touchStartX;
+          translateY = e.touches[0].clientY - touchStartY;
+          
+          // Обмеження переміщення
+          const maxTranslate = 100 * (scale - 1);
+          translateX = Math.max(-maxTranslate, Math.min(maxTranslate, translateX));
+          translateY = Math.max(-maxTranslate, Math.min(maxTranslate, translateY));
+          
+          applyTransform();
+        } else if (e.touches.length === 2) {
+          // Зум при подвійному дотику
+          const touch1 = e.touches[0];
+          const touch2 = e.touches[1];
+          const distance = Math.hypot(
+            touch2.clientX - touch1.clientX,
+            touch2.clientY - touch1.clientY
+          );
+          
+          // Обчислення центру між двома пальцями
+          const centerX = (touch1.clientX + touch2.clientX) / 2;
+          const centerY = (touch1.clientY + touch2.clientY) / 2;
+          
+          // Обчислення нової шкали
+          const newScale = Math.min(Math.max(1, touchStartScale * (distance / touchStartDistance)), 5);
+          
+          // Обчислення зміщення для центрування зуму
+          translateX = centerX - (centerX / touchStartScale) * newScale;
+          translateY = centerY - (centerY / touchStartScale) * newScale;
+          
+          scale = newScale;
+          applyTransform();
+          updateZoomLevel();
+        }
+        e.preventDefault();
+      });
+      
+      img.addEventListener('touchend', (e) => {
+        isDragging = false;
+        e.preventDefault();
+      });
+      
+      img.addEventListener('touchcancel', (e) => {
+        isDragging = false;
+        e.preventDefault();
+      });
+      
+      // Додаткова функціональність для підсвітки при наведенні
+      const productCards = document.querySelectorAll('.product-card');
+      productCards.forEach((card, index) => {
+        card.addEventListener('mouseenter', () => {
+          card.classList.add('highlighted');
+          showToast(products[index].name, 1500);
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.classList.remove('highlighted');
+        });
+      });
+      
+      // Додаткова функціональність для відображення інформації при наведенні
+      const productInfoElements = document.querySelectorAll('.product-info');
+      productInfoElements.forEach((infoElement, index) => {
+        infoElement.addEventListener('mouseenter', () => {
+          const details = [
+            `Розмір: ${products[index].size}`,
+            `Матеріал: ${products[index].material}`,
+            `Ціна: ${products[index].price}`,
+            `Кількість: ${products[index].quantity}`
+          ];
+          showToast(details.join(' • '), 3000);
+        });
+      });
+      
+      // Додавання можливості покупки
+      productCards.forEach((card, index) => {
+        card.addEventListener('dblclick', () => {
+          showToast(`Додано до кошик: ${products[index].name}`, 2000);
+        });
+      });
+    </script>
+  </body>
+  </html>
